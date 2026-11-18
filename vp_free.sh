@@ -129,6 +129,34 @@ atur_delay() {
   tunggu_enter
 }
 
+# ---------- Tutup semua ----------
+tutup_semua() {
+  local jawab
+  header
+  cari_roblox
+  if [ ${#PAKET[@]} -eq 0 ]; then
+    tulis "Tidak ada Roblox (com.roblox) yang terdeteksi."
+    tunggu_enter
+    return
+  fi
+
+  echo "Terdeteksi ${#PAKET[@]} Roblox:"
+  for p in "${PAKET[@]}"; do echo " - $p"; done
+  echo
+  read -r -p "Tutup semua? (y/n): " jawab
+  if [[ "$jawab" =~ ^[yY]$ ]]; then
+    for p in "${PAKET[@]}"; do
+      echo "Menutup $p"
+      rt "am force-stop $p"
+    done
+    echo
+    echo "Semua Roblox sudah ditutup."
+  else
+    echo "Dibatalkan."
+  fi
+  tunggu_enter
+}
+
 # ---------- Menu utama (langsung tampil, tanpa key) ----------
 while true; do
   header
@@ -136,14 +164,16 @@ while true; do
   echo
   echo "1. AUTO LAUNCH"
   echo "2. ATUR DELAY"
-  echo "3. KELUAR"
+  echo "3. TUTUP SEMUA ROBLOX"
+  echo "4. KELUAR"
   echo
   read -r -p "Pilih: " PILIH
 
   case "$PILIH" in
     1) auto_launch ;;
     2) atur_delay ;;
-    3)
+    3) tutup_semua ;;
+    4)
       echo "Sampai jumpa!"
       exit 0
       ;;
